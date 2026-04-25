@@ -1,16 +1,160 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { Navbar } from "@/components/layout/Navbar";
+import { Footer } from "@/components/layout/Footer";
+import { Button } from "@/components/ui/button";
+import { BeforeAfter } from "@/components/BeforeAfter";
+import { Link } from "react-router-dom";
+import { Sparkles, Zap, Shield, Layers, Code2, ArrowRight, Check, Upload, Cpu, Download } from "lucide-react";
 
-// IMPORTANT: Fully REPLACE this with your own code
-const PlaceholderIndex = () => {
-  // PLACEHOLDER: Replace this entire return statement with the user's app.
-  // The inline background color is intentionally not part of the design system.
+const features = [
+  { icon: Zap, title: "Lightning Fast", desc: "Get studio-grade cutouts in under 3 seconds. No waiting, no friction." },
+  { icon: Cpu, title: "AI Precision", desc: "Pixel-perfect edges, even on hair, fur, and complex transparencies." },
+  { icon: Layers, title: "Bulk Processing", desc: "Process hundreds of product photos at once. Built for e-commerce scale." },
+  { icon: Code2, title: "Developer API", desc: "Drop our REST API into your workflow. Generous free tier included." },
+  { icon: Shield, title: "Privacy First", desc: "Files auto-delete after 24 hours. We never train on your data." },
+  { icon: Sparkles, title: "Up to 5K resolution", desc: "Export full-quality PNGs ready for print, web, or marketplace." },
+];
+
+const steps = [
+  { icon: Upload, title: "Upload", desc: "Drag & drop your image — JPG, PNG, or WEBP up to 10MB." },
+  { icon: Cpu, title: "AI Magic", desc: "Our model isolates the subject with photorealistic precision." },
+  { icon: Download, title: "Download", desc: "Grab your transparent PNG. Ready for any design tool." },
+];
+
+const Index = () => {
   return (
-    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: '#fcfbf8' }}>
-      <img data-lovable-blank-page-placeholder="REMOVE_THIS" src="/placeholder.svg" alt="Your app will live here!" />
+    <div className="min-h-screen flex flex-col">
+      <Navbar />
+
+      {/* HERO */}
+      <section className="relative pt-16 pb-24 overflow-hidden">
+        <div className="absolute inset-0 grid-bg pointer-events-none" />
+        <div className="absolute top-1/4 -left-40 w-[500px] h-[500px] bg-primary/20 rounded-full blur-[120px] animate-float-slow" />
+        <div className="absolute top-10 -right-40 w-[500px] h-[500px] bg-accent/20 rounded-full blur-[120px] animate-float-slow [animation-delay:2s]" />
+
+        <div className="container relative grid lg:grid-cols-2 gap-12 items-center">
+          <div className="animate-fade-in-up">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-card text-xs font-medium text-primary mb-6">
+              <Sparkles className="h-3.5 w-3.5" />
+              Powered by next-gen AI
+            </div>
+            <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.05] tracking-tight">
+              Remove backgrounds.
+              <br />
+              <span className="gradient-text">Instantly. Perfectly.</span>
+            </h1>
+            <p className="mt-6 text-lg text-muted-foreground max-w-xl leading-relaxed">
+              SnapCut AI delivers studio-quality cutouts in seconds. Built for creators,
+              e-commerce teams, and developers who refuse to compromise on quality.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Button variant="hero" size="xl" asChild>
+                <Link to="/workspace">
+                  Try It Free <ArrowRight className="h-5 w-5" />
+                </Link>
+              </Button>
+              <Button variant="glass" size="xl" asChild>
+                <Link to="/pricing">View Pricing</Link>
+              </Button>
+            </div>
+            <div className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground">
+              {["No credit card required", "5 free images daily", "Cancel anytime"].map((t) => (
+                <div key={t} className="flex items-center gap-1.5">
+                  <Check className="h-4 w-4 text-primary" /> {t}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="animate-fade-in-up [animation-delay:200ms]">
+            <BeforeAfter />
+            <p className="text-center text-xs text-muted-foreground mt-3">
+              Drag the slider to compare
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* LOGOS / TRUST */}
+      <section className="border-y border-border/50 bg-secondary/20">
+        <div className="container py-8 flex flex-wrap items-center justify-center gap-x-12 gap-y-4 text-muted-foreground">
+          <p className="text-xs uppercase tracking-widest">Trusted by teams at</p>
+          {["NOVA Studio", "PixelForge", "ShopRise", "Atlas Design", "Lumen Co."].map((b) => (
+            <span key={b} className="font-display font-bold text-base opacity-60 hover:opacity-100 transition-opacity">
+              {b}
+            </span>
+          ))}
+        </div>
+      </section>
+
+      {/* HOW IT WORKS */}
+      <section className="container py-24">
+        <div className="text-center max-w-2xl mx-auto mb-16">
+          <p className="text-sm font-semibold text-primary uppercase tracking-wider">How it works</p>
+          <h2 className="mt-3 font-display text-3xl sm:text-4xl font-bold">Three steps. Zero friction.</h2>
+        </div>
+        <div className="grid md:grid-cols-3 gap-6">
+          {steps.map((s, i) => (
+            <div key={s.title} className="relative glass-card p-8 rounded-2xl group hover:shadow-glow transition-all duration-500">
+              <div className="absolute -top-4 -left-4 h-10 w-10 rounded-full bg-gradient-primary grid place-items-center font-bold text-primary-foreground shadow-glow">
+                {i + 1}
+              </div>
+              <s.icon className="h-8 w-8 text-primary mb-4" />
+              <h3 className="font-display text-xl font-bold">{s.title}</h3>
+              <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{s.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* FEATURES */}
+      <section className="container py-16">
+        <div className="text-center max-w-2xl mx-auto mb-16">
+          <p className="text-sm font-semibold text-primary uppercase tracking-wider">Features</p>
+          <h2 className="mt-3 font-display text-3xl sm:text-4xl font-bold">
+            Everything you need.<br />
+            <span className="gradient-text">Nothing you don't.</span>
+          </h2>
+        </div>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {features.map((f) => (
+            <div key={f.title} className="glass-card p-7 rounded-2xl hover:border-primary/40 transition-all duration-300 group">
+              <div className="h-11 w-11 rounded-lg bg-primary/10 grid place-items-center text-primary group-hover:bg-primary group-hover:text-primary-foreground group-hover:shadow-glow transition-all">
+                <f.icon className="h-5 w-5" />
+              </div>
+              <h3 className="mt-5 font-display text-lg font-bold">{f.title}</h3>
+              <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="container py-24">
+        <div className="relative overflow-hidden rounded-3xl glass-card p-10 sm:p-16 text-center">
+          <div className="absolute inset-0 bg-gradient-hero" />
+          <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-primary/30 rounded-full blur-[100px]" />
+          <div className="relative">
+            <h2 className="font-display text-3xl sm:text-5xl font-bold">
+              Ready to <span className="gradient-text">cut the noise</span>?
+            </h2>
+            <p className="mt-4 text-lg text-muted-foreground max-w-xl mx-auto">
+              Join thousands of creators using SnapCut AI to ship faster.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3 justify-center">
+              <Button variant="hero" size="xl" asChild>
+                <Link to="/register">Start Free <ArrowRight className="h-5 w-5" /></Link>
+              </Button>
+              <Button variant="glass" size="xl" asChild>
+                <Link to="/workspace">Try Demo</Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <Footer />
     </div>
   );
 };
-
-const Index = PlaceholderIndex;
 
 export default Index;
