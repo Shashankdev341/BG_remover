@@ -38,26 +38,52 @@ const Workspace = () => {
     if (f) handleFile(f);
   };
 
-  const process = () => {
-    if (!previewUrl) return;
+  const process = async () => {
+    if (!file) return;
     setProcessing(true);
-    setProgress(0);
-    // Simulated processing — wire to n8n webhook in production
-    const t = setInterval(() => {
-      setProgress((p) => {
-        const next = p + Math.random() * 18;
-        if (next >= 100) {
-          clearInterval(t);
-          setTimeout(() => {
-            setResultUrl(previewUrl); // Demo: in prod this returns transparent PNG
-            setProcessing(false);
-            toast.success("Background removed!", { description: "Your cutout is ready to download." });
-          }, 300);
-          return 100;
-        }
-        return next;
+    setProgress(10);
+    
+    const apiKey = import.meta.env.VITE_REMOVE_BG_API_KEY;
+    if (!apiKey) {
+      toast.error("API Key missing", { description: "Please add VITE_REMOVE_BG_API_KEY to your .env file." });
+      setProcessing(false);
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append("image_file", file);
+      formData.append("size", "auto");
+
+      setProgress(30);
+
+      const response = await fetch("https://api.remove.bg/v1.0/removebg", {
+        method: "POST",
+        headers: {
+          "X-Api-Key": apiKey,
+        },
+        body: formData,
       });
-    }, 200);
+
+      setProgress(70);
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData?.errors?.[0]?.title || "Failed to remove background");
+      }
+
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      
+      setResultUrl(url);
+      setProgress(100);
+      toast.success("Background removed!", { description: "Your cutout is ready to download." });
+    } catch (error: any) {
+      console.error("Removal error:", error);
+      toast.error("Processing failed", { description: error.message || "An error occurred while removing the background." });
+    } finally {
+      setProcessing(false);
+    }
   };
 
   const reset = () => {
