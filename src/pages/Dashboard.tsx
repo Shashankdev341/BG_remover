@@ -26,20 +26,20 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <main className="container py-10 flex-1">
-        <div className="flex flex-wrap items-end justify-between gap-4 mb-10">
+      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-1">
+        <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-6 mb-10">
           <div>
             <h1 className="font-display text-3xl sm:text-4xl font-bold">
               Welcome back 👋
             </h1>
             <p className="mt-2 text-muted-foreground">Here's what's happening with your cutouts.</p>
           </div>
-          <Button variant="hero" size="lg" asChild>
+          <Button variant="hero" size="lg" asChild className="w-full sm:w-auto">
             <Link to="/workspace">New Cutout</Link>
           </Button>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+        <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
           {stats.map((s) => (
             <div key={s.label} className="glass-card rounded-2xl p-5">
               <div className="flex items-center justify-between">
@@ -48,7 +48,7 @@ const Dashboard = () => {
                 </div>
                 {s.change && <span className="text-xs text-success font-semibold">{s.change}</span>}
               </div>
-              <p className="mt-4 text-xs text-muted-foreground uppercase tracking-wider">{s.label}</p>
+              <p className="mt-4 text-[10px] text-muted-foreground uppercase tracking-widest">{s.label}</p>
               <p className="mt-1 font-display text-2xl font-bold">{s.value}</p>
             </div>
           ))}
@@ -57,7 +57,7 @@ const Dashboard = () => {
         <div className="grid lg:grid-cols-3 gap-6">
           {/* Recent */}
           <div className="lg:col-span-2 glass-card rounded-2xl p-6">
-            <div className="flex items-center justify-between mb-5">
+            <div className="flex items-center justify-between mb-6">
               <h2 className="font-display text-xl font-bold">Recent cutouts</h2>
               <Link to="/workspace" className="text-sm text-primary hover:underline inline-flex items-center gap-1">
                 View all <ArrowUpRight className="h-3.5 w-3.5" />
@@ -75,29 +75,29 @@ const Dashboard = () => {
                     </div>
                   </div>
                   <p className="mt-2 text-xs font-medium truncate">{r.name}</p>
-                  <p className="text-xs text-muted-foreground">{r.date}</p>
+                  <p className="text-[10px] text-muted-foreground">{r.date}</p>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Upgrade card */}
-          <div className="relative glass-card rounded-2xl p-6 overflow-hidden">
+          <div className="relative glass-card rounded-2xl p-8 overflow-hidden">
             <div className="absolute inset-0 bg-gradient-hero" />
             <div className="absolute -top-10 -right-10 w-48 h-48 bg-accent/30 rounded-full blur-[60px]" />
             <div className="relative">
-              <h3 className="font-display text-xl font-bold">Upgrade to Pro</h3>
-              <p className="mt-2 text-sm text-muted-foreground">
+              <h3 className="font-display text-2xl font-bold">Upgrade to Pro</h3>
+              <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
                 Unlimited cutouts, 5K resolution, priority processing, and API access.
               </p>
-              <ul className="mt-5 space-y-2 text-sm">
+              <ul className="mt-6 space-y-3 text-sm">
                 {["Unlimited daily images", "Up to 5K resolution", "Bulk processing", "API access"].map((f) => (
-                  <li key={f} className="flex items-center gap-2">
-                    <span className="h-1.5 w-1.5 rounded-full bg-primary" /> {f}
+                  <li key={f} className="flex items-center gap-3">
+                    <div className="h-1.5 w-1.5 rounded-full bg-primary" /> {f}
                   </li>
                 ))}
               </ul>
-              <Button variant="hero" size="lg" className="mt-6 w-full" asChild>
+              <Button variant="hero" size="xl" className="mt-8 w-full" asChild>
                 <Link to="/pricing">Upgrade — $12/mo</Link>
               </Button>
             </div>

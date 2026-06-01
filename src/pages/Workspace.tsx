@@ -104,9 +104,9 @@ const Workspace = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <main className="container py-10 flex-1">
+      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-1">
         <div className="max-w-5xl mx-auto">
-          <div className="mb-8">
+          <div className="mb-8 text-center sm:text-left">
             <h1 className="font-display text-3xl sm:text-4xl font-bold">
               Upload <span className="gradient-text">Workspace</span>
             </h1>
@@ -121,7 +121,7 @@ const Workspace = () => {
               onDragLeave={() => setDragOver(false)}
               onDrop={onDrop}
               onClick={() => inputRef.current?.click()}
-              className={`relative rounded-3xl border-2 border-dashed p-10 sm:p-20 text-center cursor-pointer transition-all duration-300 ${
+              className={`relative rounded-3xl border-2 border-dashed p-8 sm:p-20 text-center cursor-pointer transition-all duration-300 ${
                 dragOver
                   ? "border-primary bg-primary/5 shadow-glow"
                   : "border-border hover:border-primary/60 hover:bg-secondary/30"
@@ -134,24 +134,24 @@ const Workspace = () => {
                 className="hidden"
                 onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
               />
-              <div className="mx-auto h-20 w-20 rounded-2xl bg-gradient-primary grid place-items-center shadow-glow animate-pulse-glow mb-6">
-                <Upload className="h-9 w-9 text-primary-foreground" />
+              <div className="mx-auto h-16 w-16 sm:h-20 sm:w-20 rounded-2xl bg-gradient-primary grid place-items-center shadow-glow animate-pulse-glow mb-6">
+                <Upload className="h-7 w-7 sm:h-9 sm:w-9 text-primary-foreground" />
               </div>
-              <h2 className="font-display text-2xl font-bold">Drop your image here</h2>
-              <p className="mt-2 text-muted-foreground">
+              <h2 className="font-display text-xl sm:text-2xl font-bold">Drop your image here</h2>
+              <p className="mt-2 text-sm sm:text-base text-muted-foreground">
                 or <span className="text-primary font-medium">click to browse</span>
               </p>
-              <p className="mt-6 text-xs text-muted-foreground">
+              <p className="mt-6 text-[10px] sm:text-xs text-muted-foreground">
                 JPG, PNG, WEBP · Up to 10MB · Max 5000×5000
               </p>
             </div>
           ) : (
             <div className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="grid lg:grid-cols-2 gap-6">
                 <div className="glass-card p-4 rounded-2xl">
                   <div className="flex items-center justify-between mb-3">
-                    <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Original</p>
-                    <span className="text-xs text-muted-foreground">{file && (file.size / 1024 / 1024).toFixed(2)} MB</span>
+                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Original</p>
+                    <span className="text-[10px] text-muted-foreground">{file && (file.size / 1024 / 1024).toFixed(2)} MB</span>
                   </div>
                   <div className="aspect-square rounded-xl overflow-hidden bg-secondary/30">
                     <img src={previewUrl} alt="Original" className="w-full h-full object-contain" />
@@ -160,31 +160,31 @@ const Workspace = () => {
 
                 <div className="glass-card p-4 rounded-2xl">
                   <div className="flex items-center justify-between mb-3">
-                    <p className="text-sm font-semibold text-primary uppercase tracking-wider">Result</p>
-                    {resultUrl && <span className="text-xs text-success">✓ Ready</span>}
+                    <p className="text-xs font-semibold text-primary uppercase tracking-wider">Result</p>
+                    {resultUrl && <span className="text-[10px] text-success font-medium">✓ Ready</span>}
                   </div>
                   <div className="aspect-square rounded-xl overflow-hidden checkered relative">
                     {processing ? (
                       <div className="absolute inset-0 grid place-items-center bg-background/80 backdrop-blur">
-                        <div className="text-center w-2/3">
-                          <Loader2 className="h-10 w-10 text-primary animate-spin mx-auto mb-4" />
-                          <p className="text-sm font-medium">AI working its magic…</p>
-                          <div className="mt-4 h-2 rounded-full bg-secondary overflow-hidden">
+                        <div className="text-center w-3/4">
+                          <Loader2 className="h-8 w-8 sm:h-10 sm:w-10 text-primary animate-spin mx-auto mb-4" />
+                          <p className="text-xs sm:text-sm font-medium">AI working its magic…</p>
+                          <div className="mt-4 h-1.5 sm:h-2 rounded-full bg-secondary overflow-hidden">
                             <div
                               className="h-full bg-gradient-primary transition-all duration-300"
                               style={{ width: `${progress}%` }}
                             />
                           </div>
-                          <p className="mt-2 text-xs text-muted-foreground">{Math.round(progress)}%</p>
+                          <p className="mt-2 text-[10px] sm:text-xs text-muted-foreground">{Math.round(progress)}%</p>
                         </div>
                       </div>
                     ) : resultUrl ? (
                       <img src={resultUrl} alt="Result" className="w-full h-full object-contain" />
                     ) : (
-                      <div className="absolute inset-0 grid place-items-center text-muted-foreground">
+                      <div className="absolute inset-0 grid place-items-center text-muted-foreground p-4">
                         <div className="text-center">
-                          <ImageIcon className="h-10 w-10 mx-auto mb-2 opacity-50" />
-                          <p className="text-sm">Click "Remove Background" to start</p>
+                          <ImageIcon className="h-8 w-8 sm:h-10 sm:w-10 mx-auto mb-2 opacity-50" />
+                          <p className="text-xs sm:text-sm">Click "Remove Background" to start</p>
                         </div>
                       </div>
                     )}
@@ -192,20 +192,20 @@ const Workspace = () => {
                 </div>
               </div>
 
-              <div className="flex flex-wrap gap-3 justify-center">
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 {!resultUrl ? (
-                  <Button variant="hero" size="lg" onClick={process} disabled={processing}>
+                  <Button variant="hero" size="lg" onClick={process} disabled={processing} className="w-full sm:w-auto">
                     {processing ? <Loader2 className="h-5 w-5 animate-spin" /> : <Sparkles className="h-5 w-5" />}
                     {processing ? "Processing…" : "Remove Background"}
                   </Button>
                 ) : (
-                  <Button variant="hero" size="lg" asChild>
+                  <Button variant="hero" size="lg" asChild className="w-full sm:w-auto">
                     <a href={resultUrl} download="snapcut-result.png">
                       <Download className="h-5 w-5" /> Download PNG
                     </a>
                   </Button>
                 )}
-                <Button variant="outline" size="lg" onClick={reset}>
+                <Button variant="outline" size="lg" onClick={reset} className="w-full sm:w-auto">
                   <RotateCcw className="h-4 w-4" /> New Image
                 </Button>
               </div>
@@ -213,12 +213,15 @@ const Workspace = () => {
           )}
 
           {/* Quota strip */}
-          <div className="mt-12 glass-card rounded-2xl p-5 flex flex-wrap items-center justify-between gap-4">
+          <div className="mt-12 glass-card rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
             <div>
-              <p className="text-xs text-muted-foreground uppercase tracking-wider">Daily quota</p>
-              <p className="font-display text-xl font-bold mt-1">{used} / {limit} <span className="text-sm font-normal text-muted-foreground">images used today</span></p>
+              <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Daily quota</p>
+              <p className="font-display text-xl sm:text-2xl font-bold mt-1">
+                {used} / {limit} 
+                <span className="ml-2 text-xs sm:text-sm font-normal text-muted-foreground">images used today</span>
+              </p>
             </div>
-            <Button variant="glow" size="sm" asChild>
+            <Button variant="glow" size="lg" asChild className="w-full sm:w-auto">
               <Link to="/pricing">Upgrade for unlimited</Link>
             </Button>
           </div>
