@@ -12,7 +12,7 @@ const tiers = [
     desc: "Perfect for trying things out.",
     features: ["5 images per day", "Up to 2K resolution", "JPG, PNG, WEBP", "Standard processing speed", "Community support"],
     cta: "Get Started",
-    to: "/register",
+    to: "/workspace",
     highlight: false,
   },
   {
@@ -22,7 +22,7 @@ const tiers = [
     desc: "For creators and small teams.",
     features: ["Unlimited images", "Up to 5K resolution", "Priority processing", "Bulk upload (50 at once)", "Email support", "API access (1k req/mo)"],
     cta: "Start Pro Trial",
-    to: "/register",
+    to: "/checkout-sim?plan=pro",
     highlight: true,
   },
   {
@@ -32,7 +32,7 @@ const tiers = [
     desc: "Built for high-volume teams.",
     features: ["Everything in Pro", "Bulk upload (500 at once)", "API access (50k req/mo)", "Team workspace (5 seats)", "Dedicated SLA", "Priority support"],
     cta: "Contact Sales",
-    to: "/contact",
+    to: "/checkout-sim?plan=business",
     highlight: false,
   },
 ];

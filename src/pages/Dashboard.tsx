@@ -3,13 +3,8 @@ import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Image, Zap, CreditCard, TrendingUp, ArrowUpRight, Download } from "lucide-react";
-
-const stats = [
-  { label: "Images this week", value: "23", icon: Image, change: "+12%" },
-  { label: "Daily quota", value: "3 / 5", icon: Zap, change: "" },
-  { label: "Plan", value: "Free", icon: CreditCard, change: "" },
-  { label: "Total cutouts", value: "147", icon: TrendingUp, change: "+8%" },
-];
+import { useQuota } from "@/hooks/use-quota";
+import { useSubscription } from "@/hooks/use-subscription";
 
 const recent = Array.from({ length: 6 }).map((_, i) => ({
   id: i,
@@ -18,6 +13,16 @@ const recent = Array.from({ length: 6 }).map((_, i) => ({
 }));
 
 const Dashboard = () => {
+  const { used, limit } = useQuota();
+  const { plan } = useSubscription();
+
+  const stats = [
+    { label: "Images this week", value: "23", icon: Image, change: "+12%" },
+    { label: "Daily quota", value: `${used} / ${limit === Infinity ? "∞" : limit}`, icon: Zap, change: "" },
+    { label: "Plan", value: plan.charAt(0).toUpperCase() + plan.slice(1), icon: CreditCard, change: "" },
+    { label: "Total cutouts", value: "147", icon: TrendingUp, change: "+8%" },
+  ];
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />

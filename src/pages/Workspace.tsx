@@ -1,14 +1,17 @@
-import { useState, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback } from "react";
+import { Link } from "react-router-dom";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Upload, ImageIcon, Download, RotateCcw, Loader2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
+import { useQuota } from "@/hooks/use-quota";
 
 const MAX_SIZE = 10 * 1024 * 1024;
 const ACCEPT = ["image/jpeg", "image/png", "image/webp"];
 
 const Workspace = () => {
+  const { used, limit, incrementQuota, isOverQuota } = useQuota();
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [resultUrl, setResultUrl] = useState<string | null>(null);
@@ -40,6 +43,10 @@ const Workspace = () => {
 
   const process = async () => {
     if (!file) return;
+    if (isOverQuota) {
+      toast.error("Quota exceeded", { description: "You've used your 5 free daily images. Upgrade for unlimited access!" });
+      return;
+    }
     setProcessing(true);
     setProgress(10);
     
@@ -77,10 +84,11 @@ const Workspace = () => {
       
       setResultUrl(url);
       setProgress(100);
+      incrementQuota();
       toast.success("Background removed!", { description: "Your cutout is ready to download." });
-    } catch (error: any) {
-      console.error("Removal error:", error);
-      toast.error("Processing failed", { description: error.message || "An error occurred while removing the background." });
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "An error occurred while removing the background.";
+      toast.error("Processing failed", { description: message });
     } finally {
       setProcessing(false);
     }
@@ -208,10 +216,10 @@ const Workspace = () => {
           <div className="mt-12 glass-card rounded-2xl p-5 flex flex-wrap items-center justify-between gap-4">
             <div>
               <p className="text-xs text-muted-foreground uppercase tracking-wider">Daily quota</p>
-              <p className="font-display text-xl font-bold mt-1">3 / 5 <span className="text-sm font-normal text-muted-foreground">images used today</span></p>
+              <p className="font-display text-xl font-bold mt-1">{used} / {limit} <span className="text-sm font-normal text-muted-foreground">images used today</span></p>
             </div>
             <Button variant="glow" size="sm" asChild>
-              <a href="/pricing">Upgrade for unlimited</a>
+              <Link to="/pricing">Upgrade for unlimited</Link>
             </Button>
           </div>
         </div>

@@ -28,9 +28,9 @@ export const Footer = () => {
         </div>
 
         {[
-          { title: "Product", links: [["Features", "/features"], ["Pricing", "/pricing"], ["API", "/api-docs"]] },
-          { title: "Company", links: [["About", "/about"], ["Contact", "/contact"], ["Blog", "/blog"]] },
-          { title: "Legal", links: [["Privacy", "/privacy"], ["Terms", "/terms"]] },
+          { title: "Product", links: [["Features", "/#features"], ["Pricing", "/pricing"], ["API", "#"]] },
+          { title: "Company", links: [["About", "#"], ["Contact", "#"], ["Blog", "#"]] },
+          { title: "Legal", links: [["Privacy", "#"], ["Terms", "#"]] },
         ].map((col) => (
           <div key={col.title}>
             <h4 className="text-sm font-semibold text-foreground">{col.title}</h4>

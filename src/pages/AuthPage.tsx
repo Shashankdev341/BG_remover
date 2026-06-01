@@ -1,10 +1,10 @@
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
 
@@ -44,8 +44,9 @@ const AuthPage = ({ mode }: { mode: Mode }) => {
         toast.success("Welcome back!");
         navigate("/workspace");
       }
-    } catch (error: any) {
-      toast.error(error.message || "An error occurred during authentication");
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "An error occurred";
+      toast.error(message);
     } finally {
       setLoading(false);
     }
@@ -60,8 +61,9 @@ const AuthPage = ({ mode }: { mode: Mode }) => {
         }
       });
       if (error) throw error;
-    } catch (error: any) {
-      toast.error(error.message || "Failed to start Google login");
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Failed to start Google login";
+      toast.error(message);
     }
   };
 

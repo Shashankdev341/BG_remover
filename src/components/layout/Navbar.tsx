@@ -1,45 +1,59 @@
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import logo from "@/assets/snapcut-logo.png";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Zap } from "lucide-react";
 import { useState } from "react";
+import { useSubscription } from "@/hooks/use-subscription";
+import { Badge } from "@/components/ui/badge";
 
 const navItems = [
   { to: "/", label: "Home" },
-  { to: "/features", label: "Features" },
+  { to: "/workspace", label: "Workspace" },
   { to: "/pricing", label: "Pricing" },
-  { to: "/api-docs", label: "API" },
+  { to: "/dashboard", label: "Dashboard" },
 ];
 
 export const Navbar = () => {
   const { pathname } = useLocation();
   const [open, setOpen] = useState(false);
+  const { plan, isPro } = useSubscription();
 
   return (
     <header className="sticky top-0 z-50 w-full">
       <div className="absolute inset-0 backdrop-blur-xl bg-background/60 border-b border-border/50" />
       <nav className="relative container flex h-16 items-center justify-between">
-        <Link to="/" className="flex items-center gap-2 group">
-          <img
-            src={logo}
-            alt="SnapCut AI logo"
-            className="h-9 w-auto transition-transform group-hover:scale-105"
-          />
-          <span className="sr-only">SnapCut AI</span>
-        </Link>
+        <div className="flex items-center gap-4">
+          <Link to="/" className="flex items-center gap-2 group">
+            <img
+              src={logo}
+              alt="SnapCut AI logo"
+              className="h-9 w-auto transition-transform group-hover:scale-105"
+            />
+            <span className="sr-only">SnapCut AI</span>
+          </Link>
+          {isPro && (
+            <Badge variant="secondary" className="hidden sm:flex items-center gap-1 bg-primary/20 text-primary border-primary/30 uppercase text-[10px] font-bold tracking-wider">
+              <Zap className="h-3 w-3 fill-primary" /> {plan}
+            </Badge>
+          )}
+        </div>
 
         <div className="hidden md:flex items-center gap-1">
           {navItems.map((item) => (
             <Link
               key={item.to}
               to={item.to}
-              className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
-                pathname === item.to
-                  ? "text-foreground bg-secondary"
-                  : "text-muted-foreground hover:text-foreground hover:bg-secondary/60"
-              }`}
+              className={`relative px-4 py-2 text-sm font-medium rounded-md transition-all duration-300 group/nav`}
             >
-              {item.label}
+              <span className={`relative z-10 transition-all duration-300 ${
+                pathname === item.to
+                  ? "gradient-text font-bold"
+                  : "text-white group-hover/nav:gradient-text"
+              }`}>
+                {item.label}
+              </span>
+              <div className="absolute inset-0 bg-secondary/40 opacity-0 group-hover/nav:opacity-100 rounded-md transition-all duration-300" />
+              <div className="absolute bottom-0 left-0 h-[2px] w-0 bg-gradient-to-r from-primary to-accent group-hover/nav:w-full transition-all duration-500" />
             </Link>
           ))}
         </div>
@@ -49,7 +63,7 @@ export const Navbar = () => {
             <Link to="/login">Log in</Link>
           </Button>
           <Button variant="hero" size="sm" asChild>
-            <Link to="/register">Get Started</Link>
+            <Link to="/workspace">Get Started</Link>
           </Button>
         </div>
 
@@ -70,9 +84,12 @@ export const Navbar = () => {
                 key={item.to}
                 to={item.to}
                 onClick={() => setOpen(false)}
-                className="px-4 py-3 text-sm font-medium text-muted-foreground hover:text-foreground rounded-md"
+                className="px-4 py-3 text-sm font-medium text-muted-foreground hover:text-foreground rounded-md flex items-center justify-between"
               >
                 {item.label}
+                {item.to === "/workspace" && isPro && (
+                  <Badge className="bg-primary/20 text-primary border-primary/30 text-[10px]">{plan}</Badge>
+                )}
               </Link>
             ))}
             <div className="flex gap-2 pt-2">
@@ -80,7 +97,7 @@ export const Navbar = () => {
                 <Link to="/login">Log in</Link>
               </Button>
               <Button variant="hero" size="sm" className="flex-1" asChild>
-                <Link to="/register">Get Started</Link>
+                <Link to="/workspace">Get Started</Link>
               </Button>
             </div>
           </div>
