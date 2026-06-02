@@ -1,10 +1,17 @@
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import logo from "@/assets/snapcut-logo.png";
-import { Menu, X, Zap } from "lucide-react";
+import { Menu, Zap } from "lucide-react";
 import { useState } from "react";
 import { useSubscription } from "@/hooks/use-subscription";
 import { Badge } from "@/components/ui/badge";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 const navItems = [
   { to: "/", label: "Home" },
@@ -67,46 +74,53 @@ export const Navbar = () => {
           </Button>
         </div>
 
-        <button
-          className="md:hidden p-2 text-foreground hover:bg-secondary/50 rounded-lg transition-colors"
-          onClick={() => setOpen(!open)}
-          aria-label="Toggle menu"
-        >
-          {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </button>
-      </nav>
-
-      {open && (
-        <div className="md:hidden absolute top-full left-0 right-0 border-t border-border/50 bg-background/95 backdrop-blur-xl animate-in slide-in-from-top-4 duration-300">
-          <div className="container mx-auto px-4 py-6 flex flex-col gap-2">
-            {navItems.map((item) => (
-              <Link
-                key={item.to}
-                to={item.to}
-                onClick={() => setOpen(false)}
-                className={`px-4 py-3.5 text-base font-medium rounded-xl flex items-center justify-between transition-colors ${
-                  pathname === item.to 
-                    ? "bg-primary/10 text-primary" 
-                    : "text-muted-foreground hover:bg-secondary/50 hover:text-foreground"
-                }`}
-              >
-                {item.label}
-                {item.to === "/workspace" && isPro && (
-                  <Badge className="bg-primary/20 text-primary border-primary/30 text-[10px]">{plan}</Badge>
-                )}
-              </Link>
-            ))}
-            <div className="flex flex-col gap-3 pt-4 mt-2 border-t border-border/50">
-              <Button variant="ghost" size="lg" className="w-full justify-center text-base" asChild>
-                <Link to="/login" onClick={() => setOpen(false)}>Log in</Link>
-              </Button>
-              <Button variant="hero" size="lg" className="w-full justify-center text-base" asChild>
-                <Link to="/workspace" onClick={() => setOpen(false)}>Get Started</Link>
-              </Button>
+        <Sheet open={open} onOpenChange={setOpen}>
+          <SheetTrigger asChild>
+            <button
+              className="md:hidden p-2 text-foreground hover:bg-secondary/50 rounded-lg transition-colors"
+              aria-label="Toggle menu"
+            >
+              <Menu className="h-6 w-6" />
+            </button>
+          </SheetTrigger>
+          <SheetContent side="right" className="w-[300px] sm:w-[400px] glass-card border-l-border/50 p-0">
+            <SheetHeader className="p-6 border-b border-border/50">
+              <SheetTitle className="flex items-center gap-2">
+                <img src={logo} alt="SnapCut AI" className="h-8 w-auto" />
+                <span className="gradient-text font-display font-bold">SnapCut AI</span>
+              </SheetTitle>
+            </SheetHeader>
+            <div className="flex flex-col gap-2 p-4">
+              {navItems.map((item) => (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  onClick={() => setOpen(false)}
+                  className={`px-4 py-3.5 text-base font-medium rounded-xl flex items-center justify-between transition-colors ${
+                    pathname === item.to 
+                      ? "bg-primary/10 text-primary" 
+                      : "text-muted-foreground hover:bg-secondary/50 hover:text-foreground"
+                  }`}
+                >
+                  {item.label}
+                  {item.to === "/workspace" && isPro && (
+                    <Badge className="bg-primary/20 text-primary border-primary/30 text-[10px]">{plan}</Badge>
+                  )}
+                </Link>
+              ))}
+              <div className="flex flex-col gap-3 pt-6 mt-4 border-t border-border/50">
+                <Button variant="ghost" size="lg" className="w-full justify-center text-base" asChild>
+                  <Link to="/login" onClick={() => setOpen(false)}>Log in</Link>
+                </Button>
+                <Button variant="hero" size="lg" className="w-full justify-center text-base" asChild>
+                  <Link to="/workspace" onClick={() => setOpen(false)}>Get Started</Link>
+                </Button>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
+          </SheetContent>
+        </Sheet>
+      </nav>
     </header>
   );
 };
+

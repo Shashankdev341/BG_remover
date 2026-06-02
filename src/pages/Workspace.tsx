@@ -6,12 +6,14 @@ import { Button } from "@/components/ui/button";
 import { Upload, ImageIcon, Download, RotateCcw, Loader2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { useQuota } from "@/hooks/use-quota";
+import { useRecentCutouts } from "@/hooks/use-recent-cutouts";
 
 const MAX_SIZE = 10 * 1024 * 1024;
 const ACCEPT = ["image/jpeg", "image/png", "image/webp"];
 
 const Workspace = () => {
   const { used, limit, incrementQuota, isOverQuota } = useQuota();
+  const { addCutout } = useRecentCutouts();
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [resultUrl, setResultUrl] = useState<string | null>(null);
@@ -64,6 +66,7 @@ const Workspace = () => {
 
       setProgress(30);
 
+      console.log("Starting background removal request...");
       const response = await fetch("https://api.remove.bg/v1.0/removebg", {
         method: "POST",
         headers: {
@@ -72,16 +75,36 @@ const Workspace = () => {
         body: formData,
       });
 
+      console.log("Response status:", response.status);
       setProgress(70);
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData?.errors?.[0]?.title || "Failed to remove background");
+        let errorMessage = "Failed to remove background";
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData?.errors?.[0]?.title || errorMessage;
+          console.error("API Error Data:", errorData);
+        } catch (e) {
+          const errorText = await response.text();
+          console.error("Raw Error Text:", errorText);
+          errorMessage = `Server Error (${response.status})`;
+        }
+        throw new Error(errorMessage);
       }
 
       const blob = await response.blob();
       const url = URL.createObjectURL(blob);
       
+      // Save to recent cutouts
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        addCutout({
+          name: file.name,
+          url: reader.result as string,
+        });
+      };
+      reader.readAsDataURL(blob);
+
       setResultUrl(url);
       setProgress(100);
       incrementQuota();
@@ -104,7 +127,7 @@ const Workspace = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-1">
+      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-1 overflow-hidden">
         <div className="max-w-5xl mx-auto">
           <div className="mb-8 text-center sm:text-left">
             <h1 className="font-display text-3xl sm:text-4xl font-bold">
@@ -121,7 +144,7 @@ const Workspace = () => {
               onDragLeave={() => setDragOver(false)}
               onDrop={onDrop}
               onClick={() => inputRef.current?.click()}
-              className={`relative rounded-3xl border-2 border-dashed p-8 sm:p-20 text-center cursor-pointer transition-all duration-300 ${
+              className={`relative rounded-3xl border-2 border-dashed p-6 sm:p-12 lg:p-20 text-center cursor-pointer transition-all duration-300 ${
                 dragOver
                   ? "border-primary bg-primary/5 shadow-glow"
                   : "border-border hover:border-primary/60 hover:bg-secondary/30"

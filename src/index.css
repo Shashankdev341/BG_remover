@@ -79,11 +79,15 @@
 
   html {
     color-scheme: dark;
+    @apply bg-background;
+    overflow-x: hidden;
   }
 
   body {
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "cv11", "ss01";
+    overflow-x: hidden;
+    width: 100%;
     background-image:
       radial-gradient(ellipse 80% 60% at 50% -10%, hsl(203 100% 53% / 0.15), transparent 60%),
       radial-gradient(ellipse 60% 50% at 90% 10%, hsl(270 95% 70% / 0.10), transparent 60%);

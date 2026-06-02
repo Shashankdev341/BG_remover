@@ -2,31 +2,28 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Image, Zap, CreditCard, TrendingUp, ArrowUpRight, Download } from "lucide-react";
+import { Image, Zap, CreditCard, TrendingUp, ArrowUpRight, Download, ImageIcon } from "lucide-react";
 import { useQuota } from "@/hooks/use-quota";
 import { useSubscription } from "@/hooks/use-subscription";
-
-const recent = Array.from({ length: 6 }).map((_, i) => ({
-  id: i,
-  name: `cutout-${1000 + i}.png`,
-  date: `${i + 1}h ago`,
-}));
+import { useRecentCutouts } from "@/hooks/use-recent-cutouts";
+import { formatDistanceToNow } from "date-fns";
 
 const Dashboard = () => {
   const { used, limit } = useQuota();
   const { plan } = useSubscription();
+  const { cutouts } = useRecentCutouts();
 
   const stats = [
     { label: "Images this week", value: "23", icon: Image, change: "+12%" },
     { label: "Daily quota", value: `${used} / ${limit === Infinity ? "∞" : limit}`, icon: Zap, change: "" },
     { label: "Plan", value: plan.charAt(0).toUpperCase() + plan.slice(1), icon: CreditCard, change: "" },
-    { label: "Total cutouts", value: "147", icon: TrendingUp, change: "+8%" },
+    { label: "Total cutouts", value: cutouts.length.toString(), icon: TrendingUp, change: "" },
   ];
 
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-1">
+      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-1 overflow-hidden">
         <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-6 mb-10">
           <div>
             <h1 className="font-display text-3xl sm:text-4xl font-bold">
@@ -63,21 +60,41 @@ const Dashboard = () => {
                 View all <ArrowUpRight className="h-3.5 w-3.5" />
               </Link>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-              {recent.map((r) => (
-                <div key={r.id} className="group cursor-pointer">
-                  <div className="aspect-square rounded-xl checkered relative overflow-hidden border border-border group-hover:border-primary transition-colors">
-                    <div className="absolute inset-0 grid place-items-center text-muted-foreground/40">
-                      <Image className="h-8 w-8" />
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              {cutouts.length > 0 ? (
+                cutouts.map((r) => (
+                  <div key={r.id} className="group cursor-pointer">
+                    <div className="aspect-square rounded-xl checkered relative overflow-hidden border border-border group-hover:border-primary transition-colors">
+                      {r.url ? (
+                        <img src={r.url} alt={r.name} className="w-full h-full object-contain" />
+                      ) : (
+                        <div className="absolute inset-0 grid place-items-center text-muted-foreground/40">
+                          <Image className="h-8 w-8" />
+                        </div>
+                      )}
+                      <div className="absolute inset-0 bg-background/80 backdrop-blur opacity-0 group-hover:opacity-100 transition-opacity grid place-items-center">
+                        <Button variant="glow" size="sm" asChild>
+                          <a href={r.url} download={r.name} onClick={(e) => e.stopPropagation()}>
+                            <Download className="h-3.5 w-3.5" />
+                          </a>
+                        </Button>
+                      </div>
                     </div>
-                    <div className="absolute inset-0 bg-background/80 backdrop-blur opacity-0 group-hover:opacity-100 transition-opacity grid place-items-center">
-                      <Button variant="glow" size="sm"><Download className="h-3.5 w-3.5" /></Button>
-                    </div>
+                    <p className="mt-2 text-xs font-medium truncate">{r.name}</p>
+                    <p className="text-[10px] text-muted-foreground">
+                      {formatDistanceToNow(new Date(r.date), { addSuffix: true })}
+                    </p>
                   </div>
-                  <p className="mt-2 text-xs font-medium truncate">{r.name}</p>
-                  <p className="text-[10px] text-muted-foreground">{r.date}</p>
+                ))
+              ) : (
+                <div className="col-span-full py-12 text-center glass-card rounded-2xl border-dashed">
+                  <ImageIcon className="h-10 w-10 text-muted-foreground/40 mx-auto mb-3" />
+                  <p className="text-sm text-muted-foreground">No cutouts yet</p>
+                  <Button variant="link" size="sm" asChild className="mt-1">
+                    <Link to="/workspace">Create your first cutout</Link>
+                  </Button>
                 </div>
-              ))}
+              )}
             </div>
           </div>
 

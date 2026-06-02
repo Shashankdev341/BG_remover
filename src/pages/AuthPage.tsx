@@ -70,7 +70,7 @@ const AuthPage = ({ mode }: { mode: Mode }) => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <main className="flex-1 grid place-items-center container mx-auto px-4 sm:px-6 lg:px-8 py-16 relative">
+      <main className="flex-1 grid place-items-center container mx-auto px-4 sm:px-6 lg:px-8 py-16 relative overflow-hidden">
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-full max-w-[500px] h-[500px] bg-primary/15 rounded-full blur-[120px] pointer-events-none" />
 
         <div className="relative w-full max-w-md glass-card rounded-3xl p-6 sm:p-10 shadow-elevated">

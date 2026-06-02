@@ -28,7 +28,7 @@ const Marquee = () => (
       <div className="flex items-center gap-16 px-8">
         {[...Array(5)].map((_, i) => (
           <div key={`m1-${i}`} className="flex items-center gap-8">
-            <span className="text-4xl sm:text-7xl font-display font-black text-white/30 hover:text-transparent hover:bg-gradient-to-r hover:from-primary hover:to-accent hover:bg-clip-text hover:opacity-100 transition-all duration-500 cursor-default uppercase whitespace-nowrap">
+            <span className="text-3xl sm:text-6xl lg:text-7xl font-display font-black text-white/30 hover:text-transparent hover:bg-gradient-to-r hover:from-primary hover:to-accent hover:bg-clip-text hover:opacity-100 transition-all duration-500 cursor-default uppercase whitespace-nowrap">
               Remove Background
             </span>
             <Sparkles className="h-10 w-10 text-primary/40 shrink-0" />
@@ -71,12 +71,12 @@ const Index = () => {
               <Sparkles className="h-3.5 w-3.5" />
               Powered by next-gen AI
             </div>
-            <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[1.05] tracking-tight">
+            <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight">
               Remove backgrounds.
               <br />
               <span className="gradient-text">Instantly. Perfectly.</span>
             </h1>
-            <p className="mt-6 text-lg text-muted-foreground max-w-xl mx-auto lg:mx-0 leading-relaxed">
+            <p className="mt-6 text-base sm:text-lg text-muted-foreground max-w-xl mx-auto lg:mx-0 leading-relaxed">
               SnapCut AI delivers studio-quality cutouts in seconds. Built for creators,
               e-commerce teams, and developers who refuse to compromise on quality.
             </p>

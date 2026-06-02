@@ -41,7 +41,7 @@ const Pricing = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-20 flex-1">
+      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-20 flex-1 overflow-hidden">
         <div className="text-center max-w-3xl mx-auto">
           <p className="text-sm font-semibold text-primary uppercase tracking-widest">Pricing</p>
           <h1 className="mt-4 font-display text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight">
