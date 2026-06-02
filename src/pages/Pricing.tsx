@@ -17,7 +17,7 @@ const tiers = [
   },
   {
     name: "Pro",
-    price: "$12",
+    price: "₹1",
     period: "/month",
     desc: "For creators and small teams.",
     features: ["Unlimited images", "Up to 5K resolution", "Priority processing", "Bulk upload (50 at once)", "Email support", "API access (1k req/mo)"],

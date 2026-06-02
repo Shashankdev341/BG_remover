@@ -11,6 +11,7 @@ import Pricing from "./pages/Pricing.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
 import AuthPage from "./pages/AuthPage.tsx";
 import CheckoutSim from "./pages/CheckoutSim.tsx";
+import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 
 const queryClient = new QueryClient();
 
@@ -41,12 +42,33 @@ const App = () => (
         <ScrollToHashElement />
         <Routes>
           <Route path="/" element={<Index />} />
-          <Route path="/workspace" element={<Workspace />} />
+          <Route 
+            path="/workspace" 
+            element={
+              <ProtectedRoute>
+                <Workspace />
+              </ProtectedRoute>
+            } 
+          />
           <Route path="/pricing" element={<Pricing />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route 
+            path="/dashboard" 
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            } 
+          />
           <Route path="/login" element={<AuthPage mode="login" />} />
           <Route path="/register" element={<AuthPage mode="register" />} />
-          <Route path="/checkout-sim" element={<CheckoutSim />} />
+          <Route 
+            path="/checkout-sim" 
+            element={
+              <ProtectedRoute>
+                <CheckoutSim />
+              </ProtectedRoute>
+            } 
+          />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

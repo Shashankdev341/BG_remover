@@ -15,8 +15,8 @@ const CheckoutSim = () => {
   const plan = (searchParams.get("plan") || "pro") as Plan;
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const priceUSD = plan === "business" ? 49 : 12;
-  const priceINR = plan === "business" ? 3999 : 999;
+  const priceUSD = plan === "business" ? 49 : 1;
+  const priceINR = plan === "business" ? 3999 : 1;
   const name = plan === "business" ? "Business Plan" : "Pro Plan";
 
   const handlePaymentSuccess = (response: any) => {
