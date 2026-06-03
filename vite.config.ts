@@ -19,4 +19,15 @@ export default defineConfig(({ mode }) => ({
     },
     dedupe: ["react", "react-dom", "react/jsx-runtime", "react/jsx-dev-runtime", "@tanstack/react-query", "@tanstack/query-core"],
   },
+  build: {
+    chunkSizeWarningLimit: 1000,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ["react", "react-dom", "react-router-dom", "lucide-react"],
+          ui: ["@radix-ui/react-slot", "class-variance-authority", "clsx", "tailwind-merge"],
+        },
+      },
+    },
+  },
 }));
