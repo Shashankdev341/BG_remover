@@ -79,8 +79,30 @@
 
   html {
     color-scheme: dark;
+    /* Lenis needs this to be initial or auto */
+    scroll-behavior: initial !important;
     @apply bg-background;
     overflow-x: hidden;
+  }
+
+  html.lenis {
+    height: auto;
+  }
+
+  .lenis.lenis-smooth {
+    scroll-behavior: auto;
+  }
+
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  .lenis.lenis-scrolling iframe {
+    pointer-events: none;
   }
 
   body {
@@ -92,6 +114,28 @@
       radial-gradient(ellipse 80% 60% at 50% -10%, hsl(203 100% 53% / 0.15), transparent 60%),
       radial-gradient(ellipse 60% 50% at 90% 10%, hsl(270 95% 70% / 0.10), transparent 60%);
     background-attachment: fixed;
+    /* Prevent layout shift */
+    scrollbar-gutter: stable;
+  }
+
+  /* Premium Scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--background));
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--secondary));
+    border-radius: 20px;
+    border: 3px solid hsl(var(--background));
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--primary) / 0.5);
   }
 
   ::selection {

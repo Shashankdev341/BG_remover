@@ -1,5 +1,5 @@
-import React, { useState, useRef, useCallback } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useRef, useCallback, useEffect } from "react";
+import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
@@ -7,12 +7,39 @@ import { Upload, ImageIcon, Download, RotateCcw, Loader2, Sparkles } from "lucid
 import { toast } from "sonner";
 import { useQuota } from "@/hooks/use-quota";
 import { useRecentCutouts } from "@/hooks/use-recent-cutouts";
+import { supabase } from "@/lib/supabase";
 
 const MAX_SIZE = 10 * 1024 * 1024;
 const ACCEPT = ["image/jpeg", "image/png", "image/webp"];
 
 const Workspace = () => {
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const { used, limit, incrementQuota, isOverQuota } = useQuota();
+  
+  useEffect(() => {
+    const checkUserIntent = async () => {
+      const mode = searchParams.get("auth_mode");
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (user && mode === "login") {
+        // Check if the user was literally JUST created (within the last 10 seconds)
+        const createdAt = new Date(user.created_at).getTime();
+        const now = new Date().getTime();
+        const isNewUser = (now - createdAt) < 10000; // 10 seconds window
+
+        if (isNewUser) {
+          toast.error("Account not found", { 
+            description: "No account exists with this Google email. Please sign up first." 
+          });
+          await supabase.auth.signOut();
+          navigate("/register");
+        }
+      }
+    };
+    checkUserIntent();
+  }, [searchParams, navigate]);
+
   const { addCutout } = useRecentCutouts();
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);

@@ -7,7 +7,7 @@ import { Check } from "lucide-react";
 const tiers = [
   {
     name: "Free",
-    price: "$0",
+    price: "₹0",
     period: "forever",
     desc: "Perfect for trying things out.",
     features: ["5 images per day", "Up to 2K resolution", "JPG, PNG, WEBP", "Standard processing speed", "Community support"],
@@ -27,7 +27,7 @@ const tiers = [
   },
   {
     name: "Business",
-    price: "$49",
+    price: "₹3999",
     period: "/month",
     desc: "Built for high-volume teams.",
     features: ["Everything in Pro", "Bulk upload (500 at once)", "API access (50k req/mo)", "Team workspace (5 seats)", "Dedicated SLA", "Priority support"],

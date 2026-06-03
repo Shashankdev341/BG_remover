@@ -20,6 +20,7 @@ const CheckoutSim = () => {
   const name = plan === "business" ? "Business Plan" : "Pro Plan";
 
   const handlePaymentSuccess = (response: any) => {
+    console.warn("PAYMENT SUCCESS HANDLER TRIGGERED", response);
     setIsProcessing(true);
     console.log("Payment Successful:", response);
     

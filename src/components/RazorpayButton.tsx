@@ -11,50 +11,40 @@ interface RazorpayButtonProps {
 
 export const RazorpayButton: React.FC<RazorpayButtonProps> = ({ amount, planName, onSuccess }) => {
   const [loading, setLoading] = useState(false);
-
-  const loadRazorpayScript = () => {
-    return new Promise((resolve) => {
-      const script = document.createElement('script');
-      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-      script.onload = () => resolve(true);
-      script.onerror = () => resolve(false);
-      document.body.appendChild(script);
-    });
-  };
+  console.warn("RazorpayButton Component Rendered for:", planName);
 
   const handlePayment = async () => {
-    const key = import.meta.env.VITE_RAZORPAY_KEY_ID;
-    
-    if (!key || key.includes('YOUR_KEY_ID_HERE')) {
-      toast.error('Invalid Razorpay Key ID', { 
-        description: 'Please update VITE_RAZORPAY_KEY_ID in your .env file with your real test key.' 
-      });
-      return;
-    }
-
+    console.warn("Pay button clicked!");
     setLoading(true);
-    const res = await loadRazorpayScript();
-
-    if (!res) {
-      toast.error('Razorpay SDK failed to load. Are you online?');
+    
+    const key = (import.meta.env.VITE_RAZORPAY_KEY_ID || "").trim();
+    console.warn("--- Razorpay Debug ---");
+    console.warn("Key from Env:", key ? `[${key.substring(0, 10)}...]` : "NOT FOUND");
+    console.warn("Key Length:", key.length);
+    console.warn("Amount (Paise):", amount * 100);
+    console.warn("----------------------");
+    
+    if (!key) {
+      toast.error('Razorpay Key ID is missing in .env file.');
       setLoading(false);
       return;
     }
 
-    // In a real implementation, you would call your backend here to create an order
-    // const orderData = await fetch('/api/create-order', { method: 'POST', body: JSON.stringify({ amount }) }).then(t => t.json());
-    
-    // For demonstration, we'll use a dummy order ID or let Razorpay handle it (Standard Checkout)
-    // Note: Standard Checkout without Order ID is less secure and not recommended for production.
-    
+    if (!(window as any).Razorpay) {
+      toast.error('Razorpay SDK not loaded. Please check your internet connection and refresh.');
+      setLoading(false);
+      return;
+    }
+
     const options = {
-      key: key, // Use the validated key
-      amount: amount * 100,
+      key: key,
+      amount: Math.round(amount * 100), // Ensure it's an integer
       currency: 'INR',
       name: 'SnapCut AI',
       description: `Subscription for ${planName}`,
       image: '/snapcut-logo.png',
       handler: function (response: any) {
+        setLoading(false);
         onSuccess(response);
       },
       modal: {
@@ -70,15 +60,21 @@ export const RazorpayButton: React.FC<RazorpayButtonProps> = ({ amount, planName
       },
       notes: {
         address: 'SnapCut AI Office',
+        plan: planName
       },
       theme: {
         color: '#0EA5FF',
       },
     };
 
-    const paymentObject = new (window as any).Razorpay(options);
-    paymentObject.open();
-    setLoading(false);
+    try {
+      const paymentObject = new (window as any).Razorpay(options);
+      paymentObject.open();
+    } catch (error) {
+      console.error("Razorpay Error:", error);
+      toast.error("Failed to initialize payment. Please try again.");
+      setLoading(false);
+    }
   };
 
   return (
